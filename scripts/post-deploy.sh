@@ -5,6 +5,21 @@ set -euo pipefail
 
 PLUGINS_FILE="${1:?usage: post-deploy.sh <plugins.txt>}"
 
+# alwaysdata does not ship wp-cli; install the official phar (checksum-verified) when missing.
+export PATH="$HOME/.local/bin:$PATH"
+if ! command -v wp >/dev/null 2>&1; then
+	echo "installing wp-cli"
+	mkdir -p "$HOME/.local/bin"
+	tmp="$(mktemp -d)"
+	base=https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar
+	curl -fsSL -o "$tmp/wp-cli.phar" "$base/wp-cli.phar"
+	curl -fsSL -o "$tmp/wp-cli.phar.sha512" "$base/wp-cli.phar.sha512"
+	(cd "$tmp" && echo "$(cat wp-cli.phar.sha512)  wp-cli.phar" | sha512sum -c -)
+	install -m 755 "$tmp/wp-cli.phar" "$HOME/.local/bin/wp"
+	rm -rf "$tmp"
+fi
+wp --version
+
 # Make sure the parent theme of liansi-child exists (e.g. on a fresh server).
 wp theme is-installed kadence || wp theme install kadence
 
