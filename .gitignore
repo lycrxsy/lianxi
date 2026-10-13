@@ -1,0 +1,14 @@
+# 只跟踪我们自己写的代码；WordPress 核心、第三方插件、上传文件、数据库都不进仓库。
+wp-config.php
+.env
+*.sql
+*.sql.gz
+*.zip
+wp-content/uploads/
+wp-content/upgrade/
+wp-content/cache/
+wp-content/plugins/
+wp-content/languages/
+.DS_Store
+.idea/
+.vscode/

@@ -1,0 +1,10 @@
+# 插件清单：slug@version，一行一个。
+# post-deploy.sh 只安装服务器上缺少的插件（例如迁移到新服务器时），不会降级或覆盖已有插件。
+# 在后台升级插件后，请同步修改这里的版本号。
+kadence-blocks@3.7.12.1
+polylang@3.8.10
+custom-post-type-ui@1.19.3
+fluentform@6.2.15
+wp-mail-smtp@4.10.2
+updraftplus@1.26.8
+limit-login-attempts-reloaded@3.3.10

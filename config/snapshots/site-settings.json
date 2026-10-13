@@ -1,0 +1,56 @@
+{
+  "_note": "线上站点设置的快照（2026-10-13），仅供参考和迁移，流水线不会自动应用。这些设置存放在数据库里，以服务器后台为准。",
+  "wordpress": {
+    "version": "7.1.3",
+    "php": "8.4",
+    "install_path": "/home/danieleo/www/liansi",
+    "permalink_structure": "/%postname%/",
+    "timezone": "Asia/Shanghai",
+    "blog_public": 0,
+    "show_on_front": "page",
+    "page_on_front": { "zh": 13, "en": 76 },
+    "site_logo": 24,
+    "site_icon": 26
+  },
+  "theme": {
+    "active": "kadence",
+    "kadence_version": "1.5.2",
+    "theme_mods_changed": {
+      "logo_layout": { "include": { "mobile": "", "tablet": "", "desktop": "logo_only" }, "layout": { "mobile": "", "tablet": "", "desktop": "standard" } },
+      "logo_width": { "size": { "mobile": 150, "tablet": "", "desktop": 200 }, "unit": { "mobile": "px", "tablet": "px", "desktop": "px" } },
+      "footer_html_content": "{copyright} {year} {site-title}",
+      "ls_product_title_layout": "above",
+      "ls_product_feature": true,
+      "ls_product_feature_ratio": "inherit",
+      "solution_title_layout": "above",
+      "solution_feature": true,
+      "solution_feature_ratio": "9-16"
+    },
+    "home_page_meta": { "_kad_post_title": "hide", "_kad_post_layout": "fullwidth", "_kad_post_content_style": "unboxed", "_kad_post_vertical_padding": "hide" }
+  },
+  "polylang": {
+    "languages": ["zh (zh_CN, default)", "en (en_US)"],
+    "url_mode": "directory, default language without prefix (/ and /en/)",
+    "media_translation": false,
+    "translated_post_types": ["ls_product", "solution"],
+    "untranslated_post_types": ["client"],
+    "translated_taxonomies": ["product_category"],
+    "translated_strings": { "联思科技": "Liansi Technology", "连接智能，驱动制造": "Connecting Intelligence, Driving Manufacturing", "Y年n月j日": "F j, Y" }
+  },
+  "menus": {
+    "主菜单（中文）": { "id": 10, "locations": ["primary", "mobile"] },
+    "Main Menu (English)": { "id": 40, "locations": ["primary___en", "mobile___en"] },
+    "language_switcher": "hide_current = true"
+  },
+  "fluent_forms": {
+    "zh_contact_form_id": 3,
+    "en_contact_form_id": 1
+  },
+  "pages": {
+    "about":    { "zh": "/ (id 13)",               "en": "/en/ (id 76)" },
+    "products": { "zh": "/products/ (id 9)",       "en": "/en/product-center/ (id 78)" },
+    "solutions":{ "zh": "/solutions/ (id 10)",     "en": "/en/industry-solutions/ (id 80)" },
+    "support":  { "zh": "/service-support/ (id 11)","en": "/en/support/ (id 82)" },
+    "contact":  { "zh": "/contact/ (id 12)",       "en": "/en/contact-us/ (id 84)" }
+  }
+}

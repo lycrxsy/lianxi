@@ -1,0 +1,46 @@
+name: Deploy
+
+# 推送到 main 时自动部署；也可以在 GitHub 的 Actions 页面手动运行。
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      SSH_TARGET: ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+      DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+      # Deploy tooling lives outside the web root so it is never reachable over HTTP.
+      TOOLS_DIR: .liansi-deploy
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+
+      - name: Prepare remote folders
+        run: ssh "$SSH_TARGET" "mkdir -p '$DEPLOY_PATH/wp-content/mu-plugins' '$DEPLOY_PATH/wp-content/themes/liansi-child' ~/$TOOLS_DIR"
+
+      # Only our own folders are synced. Never point rsync --delete at wp-content:
+      # it would wipe uploads and third-party plugins on the server.
+      - name: Sync code
+        run: |
+          rsync -az --delete wp-content/themes/liansi-child/ "$SSH_TARGET:$DEPLOY_PATH/wp-content/themes/liansi-child/"
+          rsync -az wp-content/mu-plugins/liansi-core.php "$SSH_TARGET:$DEPLOY_PATH/wp-content/mu-plugins/"
+          # A relative remote path is resolved against the SSH user's home directory.
+          rsync -az config/plugins.txt scripts/post-deploy.sh scripts/activate-child-theme.sh "$SSH_TARGET:$TOOLS_DIR/"
+
+      - name: Post-deploy
+        run: ssh "$SSH_TARGET" "cd '$DEPLOY_PATH' && bash ~/$TOOLS_DIR/post-deploy.sh ~/$TOOLS_DIR/plugins.txt"

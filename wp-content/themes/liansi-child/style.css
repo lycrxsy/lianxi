@@ -1,0 +1,16 @@
+/*
+Theme Name:   Liansi Child
+Theme URI:    https://danieleo.alwaysdata.net/
+Description:  联思官网子主题，基于 Kadence。品牌样式和模板调整都写在这里，Kadence 升级时不会被覆盖。
+Author:       Liansi
+Template:     kadence
+Version:      1.0.0
+Text Domain:  liansi-child
+*/
+
+:root {
+	--liansi-navy: #14233c;
+	--liansi-blue: #1f5fbf;
+	--liansi-cyan: #18b4c9;
+	--liansi-bg-soft: #f5f7fa;
+}
