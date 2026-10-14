@@ -59,9 +59,20 @@ WordPress 按主题分别保存定制器设置，直接在后台切换会丢失 
 cd /home/danieleo/www/liansi && bash ~/.liansi-deploy/activate-child-theme.sh
 ```
 
-## 迁移到新服务器
+## 迁移到新服务器（阿里云 ECS，Ubuntu 24.04）
 
-1. 用 UpdraftPlus 或 Duplicator 迁移数据库和上传文件（会自动替换域名）。
-2. 修改 GitHub Secrets 中的 `SSH_HOST`、`SSH_USER`、`DEPLOY_PATH`。
-3. 运行一次 Deploy 流水线，补齐子主题、mu-plugin 和缺失插件。
-4. 上线前在 **设置 → 阅读** 取消"建议搜索引擎不索引本站点"。
+已迁移到阿里云 ECS（华北 2 北京，`123.56.8.177`），站点目录 `/var/www/liansi`，部署用户 `deploy`。
+
+1. 新服务器以 root 运行一次初始化脚本（Nginx、PHP 8.3、MariaDB、防火墙、Swap、自动安全更新、部署用户、数据库）：
+   ```bash
+   scp scripts/provision-ubuntu.sh root@<IP>:/root/ && ssh root@<IP> bash /root/provision-ubuntu.sh
+   ```
+   数据库密码随机生成，只保存在服务器的 `/root/liansi-db.env`。
+2. 中国大陆服务器访问不了 GitHub：wp-cli 需在本机下载并校验后上传到 `/usr/local/bin/wp`。
+3. 在本机运行迁移脚本（复制插件、主题、上传文件、语言包和数据库，并替换网址；只读取旧站）：
+   ```bash
+   scripts/migrate-from-alwaysdata.sh http://<IP>        # 有域名后改成 https://www.<域名>
+   ```
+4. 修改 GitHub Secrets：`SSH_HOST`、`SSH_USER=deploy`、`DEPLOY_PATH=/var/www/liansi`、`SSH_KNOWN_HOSTS`，再运行 Deploy。
+5. 域名备案通过后：解析域名、用 certbot 配置 HTTPS、把网址替换成域名，
+   并在 **设置 → 阅读** 取消"建议搜索引擎不索引本站点"。
